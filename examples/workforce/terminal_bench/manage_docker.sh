@@ -1,13 +1,21 @@
 #!/bin/bash
 
 # Set image name and tag
-IMAGE_NAME="my-camel"
-TAG="latest"
-FULL_NAME="${IMAGE_NAME}:${TAG}"
+# IMAGE_NAME="my-camel"
+# TAG="latest"
+TASK="play-zork"
+FULL_NAME=$TASK
+
+# Default Dockerfile path (can be overridden by command line)
+DOCKERFILE_PATH="$SCRIPT_DIR/Dockerfile"
 
 # Get CAMEL project root directory absolute path
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-CAMEL_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
+SCRIPT_DIR=${SCRIPT_DIR}/tasks/${TASK}
+CAMEL_ROOT="$( cd "$SCRIPT_DIR/../../../../.." && pwd )"
+
+echo $SCRIPT_DIR
+echo $CAMEL_ROOT
 
 # Display help information
 show_help() {
@@ -48,6 +56,7 @@ build_image() {
     sed -i '' 's|COPY ../../../|COPY camel_source/|g' "$TEMP_DIR/Dockerfile"
     sed -i '' 's|COPY camel/runtimes/api.py|COPY api/api.py|g' "$TEMP_DIR/Dockerfile"
     
+    #
     # Build in temporary directory
     (cd "$TEMP_DIR" && docker build -t ${FULL_NAME} .)
     

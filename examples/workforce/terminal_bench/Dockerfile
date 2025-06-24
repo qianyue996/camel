@@ -20,12 +20,11 @@ COPY ../../../ ./camel/
 WORKDIR /app/camel
 
 # Install CAMEL and its dependencies
-RUN pip3 install uv
-RUN uv pip install -e ".[all]" --system
+RUN pip3 install -e ".[all]"
 
 # Copy API service file
 RUN mkdir -p /home
-COPY camel/runtimes/api.py /home/api.py
+COPY camel/runtime/api.py /home/api.py
 
 # Set Python path and other environment variables
 ENV PYTHONPATH=/app/camel
